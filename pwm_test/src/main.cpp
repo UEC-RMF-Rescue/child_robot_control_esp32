@@ -83,14 +83,14 @@ void loop() {
     ledcWrite(1,0);
   }
   
-  // Serial.print("encode_v: ");
-  // Serial.print(encode_v);
-  // Serial.print(", v: ");
-  // Serial.print(encoder2vel(encode_v));
-  // Serial.print(", error: ");
-  // Serial.print(error);
-  // Serial.print(", duty: ");
-  // Serial.println(duty);
+  Serial.print("encode_v: ");
+  Serial.print(encode_v);
+  Serial.print(", v: ");
+  Serial.print(encoder2vel(encode_v));
+  Serial.print(", error: ");
+  Serial.print(error);
+  Serial.print(", duty: ");
+  Serial.println(duty);
 }
 
 int dir = 1;
