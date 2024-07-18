@@ -1,0 +1,11 @@
+{
+	"name": "QRotary",
+	"version": "0.0.2",
+	"keywords": "rotary encoder for child robot",
+	"description": "ESP8266/Arduino Library for reading pololu rotary encoder values(quad).",
+	"authors": {
+		"name": "Hibiki Maruyama"
+	},
+	"frameworks": "arduino",
+	"platforms": "*"
+}

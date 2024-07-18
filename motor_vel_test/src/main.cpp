@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "childmotor.h"
+#include <QRotary.h>
 
 #define VCC 4
 #define MIN1 12
@@ -16,12 +16,10 @@
 
 #define OFFSET 40
 
-ChildMotor m;
+QRotary m;
 
 void setup() {
-  m.init(ROA, ROB, STEP);
-  m.setWheel(WHEEL_RAD, GEAR_RATIO);
-  m.setInterval(INTERVAL);
+  m.begin(ROA, ROB, STEP, WHEEL_RAD, GEAR_RATIO, INTERVAL);
 
   pinMode(VCC, OUTPUT);
   
@@ -37,10 +35,10 @@ void setup() {
 }
 
 void loop(){
-  ledcWrite(0, 100);
+  ledcWrite(0, 60);
   ledcWrite(1, 0);
 
-  m.updateCount();
-  Serial.println(m.getVel());
+  m.update();
+  Serial.println(m.getValue());
   delay(10);
 }

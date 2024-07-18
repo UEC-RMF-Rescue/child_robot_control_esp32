@@ -1,25 +1,26 @@
-#ifndef childmotor_h
-#define childmotor_h
+#ifndef QRotary_h
+#define QRotary_h
 #include <Arduino.h>
 #include <iostream>
 
-class ChildMotor
+class QRotary
 {
 public:
     // setup
-    void init(int rotary_pin_1, int rotary_pin_2, int steps_per_click);
+    void begin(int rotary_pin_1, int rotary_pin_2, int steps_per_click, int wheel_rad_mm, int gear_ratio, int interval);
+    void setRotaryPin(int rotary_pin_1, int rotary_pin_2);
+    void setStepsPerClick(int steps_per_click);
     void setWheel(int wheel_rad_mm, int gear_ratio);
-    void setPI(float p_coef, float i_coef, int offset, int interval);
     void setInterval(int interval);
 
     // functions for checking the data
     int getCount();
+    int getValue();
     float getVel(); // mm/sec
     float getRPM();
 
     // functions to use in main loop
-    void updateCount();
-    // void updateDuty(int* duty);
+    void update();
 
 private:
     int encoder_value = 0;
