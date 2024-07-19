@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <QRotary.h>
+#include "QRotary.h"
 
 #define VCC 4
 #define MIN1 12
@@ -20,6 +20,7 @@ QRotary m;
 
 void setup() {
   m.begin(ROA, ROB, STEP, WHEEL_RAD, GEAR_RATIO, INTERVAL);
+  // m.setStepsPerClick(STEP);
 
   pinMode(VCC, OUTPUT);
   
@@ -32,13 +33,17 @@ void setup() {
   
   Serial.begin(115200);
   Serial.println("Serail start");
+
+  ledcWrite(1, 0);
 }
 
+int i = 60;
 void loop(){
-  ledcWrite(0, 60);
-  ledcWrite(1, 0);
+  ledcWrite(0, i);
+  if (i < 256) i++;
+  // ledcWrite(0, 25);
 
   m.update();
-  Serial.println(m.getValue());
-  delay(10);
+  Serial.println(m.getVel());
+  delay(15);
 }

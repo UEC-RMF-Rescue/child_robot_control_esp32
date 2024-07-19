@@ -1,7 +1,6 @@
 #ifndef QRotary_h
 #define QRotary_h
 #include <Arduino.h>
-#include <iostream>
 
 class QRotary
 {
@@ -16,7 +15,7 @@ public:
     // functions for checking the data
     int getCount();
     int getValue();
-    float getVel(); // mm/sec
+    float getVel_abs(); // mm/sec
     float getRPM();
 
     // functions to use in main loop

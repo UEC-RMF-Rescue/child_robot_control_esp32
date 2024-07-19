@@ -1,10 +1,14 @@
 {
 	"name": "QRotary",
-	"version": "0.0.2",
-	"keywords": "rotary encoder for child robot",
-	"description": "ESP8266/Arduino Library for reading pololu rotary encoder values(quad).",
+	"version": "0.0.3",
+	"keywords": "rotary encoder for child robot, esp32",
+	"description": "ESP8266/Arduino Library for reading rotary encoder values.",
+	"repository": {
+		"type": "git",
+		"url": "not yet"
+	},
 	"authors": {
-		"name": "Hibiki Maruyama"
+		"name": "UEC RMF Rescue"
 	},
 	"frameworks": "arduino",
 	"platforms": "*"
