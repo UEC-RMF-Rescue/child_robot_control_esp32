@@ -1,9 +1,5 @@
 #include "QRotary_dev.h"
 
-// int rotary_count = 0;
-// // int encoder_value = 0;
-// void updateEncoder(){ rotary_count++; }
-
 // initialize encoder
 // for callback, give increment function
 void QRotary::begin(void (*callback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2, int steps_per_click, int wheel_rad_mm, int gear_ratio, int interval){
@@ -51,12 +47,3 @@ void QRotary::update(){
         *rotary_count = 0;
     }
 }
-
-// void QRotary::update_func(){
-//     previousMillis = currentMillis;
-//     encoder_value = getCount();
-// }
-
-// void QRotary::reset(){
-//     rotary_count = 0;
-// }

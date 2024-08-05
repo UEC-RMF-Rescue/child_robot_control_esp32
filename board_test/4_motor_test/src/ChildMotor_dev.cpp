@@ -1,7 +1,5 @@
 #include "ChildMotor_dev.h"
 
-// void ChildMotor::rotary_callback(){ rotary_count++; }
-
 void ChildMotor::attach_motor(int motor_pin_1, uint8_t motor_channel_1, int motor_pin_2, uint8_t motor_channel_2, uint32_t freq, uint8_t resolution_bites, float max_v_mm_sec, float min_v_mm_sec){
     ledcSetup(motor_channel_1, freq, resolution_bites);
     ledcAttachPin(motor_pin_1, motor_channel_1);
@@ -62,15 +60,9 @@ void ChildMotor::velWrite(float targ_vel_mm_sec){
 
 void ChildMotor::velWrite_ratio(float input){}
 
-void ChildMotor::update_rotary(){
-    r.update();
-}
+void ChildMotor::update_rotary(){ r.update(); }
 
 void ChildMotor::update(float targ_vel_mm_sec){
     r.update();
     velWrite(targ_vel_mm_sec);
 }
-
-// void ChildMotor::update_func(){
-//     r.update_func();
-// }

@@ -1,19 +1,18 @@
 #include "QRotary.h"
 
-int rotary_count = 0;
-void updateEncoder(){ rotary_count++; }
-
 // initialize encoder
-void QRotary::begin(int rotary_pin_1, int rotary_pin_2, int steps_per_click, int wheel_rad_mm, int gear_ratio, int interval){
-    setRotaryPin(rotary_pin_1, rotary_pin_2);
+// for callback, give increment function
+void QRotary::begin(void (*callback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2, int steps_per_click, int wheel_rad_mm, int gear_ratio, int interval){
+    setRotaryPin(callback, rotary_count, rotary_pin_1, rotary_pin_2);
     setStepsPerClick(steps_per_click);
     setWheel(wheel_rad_mm, gear_ratio);
     setInterval(interval);
 }
 
-void QRotary::setRotaryPin(int rotary_pin_1, int rotary_pin_2){
-    attachInterrupt(digitalPinToInterrupt(rotary_pin_1), updateEncoder, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(rotary_pin_2), updateEncoder, CHANGE);
+void QRotary::setRotaryPin(void (*callback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2){
+    this->rotary_count = rotary_count;
+    attachInterrupt(digitalPinToInterrupt(rotary_pin_1), callback, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(rotary_pin_2), callback, CHANGE);
 }
 
 void QRotary::setStepsPerClick(int steps_per_click){ this->steps_per_click = steps_per_click; }
@@ -26,7 +25,7 @@ void QRotary::setWheel(int wheel_rad_mm, int gear_ratio){
 void QRotary::setInterval(int interval){ this->interval = interval; }
 
 // get information
-int QRotary::getCount(){ return rotary_count; }
+// int QRotary::getCount(){ return rotary_count; }
 
 int QRotary::getValue(){ return encoder_value; }
 
@@ -39,17 +38,12 @@ float QRotary::getRPM(){
 }
 
 // update information
+// give pointor of rotary increment which you set in "begin"
 void QRotary::update(){
     currentMillis = millis();
     if (currentMillis - previousMillis > interval){
         previousMillis = currentMillis;
-        encoder_value = getCount();
-        rotary_count = 0;
+        encoder_value = *rotary_count;
+        *rotary_count = 0;
     }
-}
-
-void QRotary::update_func(){
-    previousMillis = currentMillis;
-    encoder_value = getCount();
-    rotary_count = 0;
 }

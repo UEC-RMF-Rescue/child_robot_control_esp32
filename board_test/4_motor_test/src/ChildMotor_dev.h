@@ -31,10 +31,7 @@ public:
 
     void update_rotary();
     void update(float targ_vel_mm_sec);
-    // void update_func();
-
-    // void reset(){r.reset();};
-
+    
 private:
     QRotary r;
     int rotary_count;
