@@ -47,3 +47,9 @@ void QRotary::update(){
         rotary_count = 0;
     }
 }
+
+void QRotary::update_func(){
+    previousMillis = currentMillis;
+    encoder_value = getCount();
+    rotary_count = 0;
+}

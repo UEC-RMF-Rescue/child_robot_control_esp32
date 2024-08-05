@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include "QRotary.h"
+// #include "QRotary.h"
 #include "ChildMotor.h"
-#include "pinassign_M1.h"
+#include "pinassign.h"
 
 #define INTERVAL 100
 
@@ -11,11 +11,13 @@
 ChildMotor m;
 
 void setup() {
-  pinMode(VCC, OUTPUT);
-  digitalWrite(VCC, HIGH);
+  pinMode(LED_G, OUTPUT);
+  digitalWrite(LED_G, LOW);
+  pinMode(LED_R, OUTPUT);
+  digitalWrite(LED_R, LOW);
 
-  m.attach_motor(MIN1, 0, MIN2, 1);
-  m.attach_encoder(MROA, MROB, INTERVAL);
+  m.attach_motor(M4IN1, 0, M4IN2, 1);
+  m.attach_encoder(RO4A, RO4B, INTERVAL);
   m.attach_control(P_COEF, I_COEF);
 
   Serial.begin(115200);
@@ -23,7 +25,7 @@ void setup() {
 
 void loop() {
   // pid_test
-  // m.update(400);
+  // m.update(100);
   // Serial.print("error: ");
   // Serial.print(m.getError());
   // Serial.print(", vel: ");
@@ -35,11 +37,14 @@ void loop() {
 
   // motor_test
   m.move_motor(0.2);
-  delay(1000);
+  delay(5000);
 
   m.move_motor(0);
   delay(1000);
 
   m.move_motor(-0.2);
+  delay(5000);
+
+  m.move_motor(0);
   delay(1000);
 }

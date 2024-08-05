@@ -1,4 +1,6 @@
-#include "ChildMotor.h"
+#include "ChildMotor_dev.h"
+
+// void ChildMotor::rotary_callback(){ rotary_count++; }
 
 void ChildMotor::attach_motor(int motor_pin_1, uint8_t motor_channel_1, int motor_pin_2, uint8_t motor_channel_2, uint32_t freq, uint8_t resolution_bites, float max_v_mm_sec, float min_v_mm_sec){
     ledcSetup(motor_channel_1, freq, resolution_bites);
@@ -13,8 +15,8 @@ void ChildMotor::attach_motor(int motor_pin_1, uint8_t motor_channel_1, int moto
     this->max_duty = pow(2.0, (float)resolution_bites);
 }
 
-void ChildMotor::attach_encoder(int rotary_pin_1, int rotary_pin_2, int interval, int steps_per_click, int wheel_rad_mm, int gear_ratio){
-    this->r.begin(rotary_pin_1, rotary_pin_2, steps_per_click, wheel_rad_mm, gear_ratio, interval);
+void ChildMotor::attach_encoder(void (*callback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2, int interval, int steps_per_click, int wheel_rad_mm, int gear_ratio){
+    r.begin(callback, rotary_count, rotary_pin_1, rotary_pin_2, steps_per_click, wheel_rad_mm, gear_ratio, interval);
 }
 
 void ChildMotor::attach_control(float p_coef, float i_coef, float offset_ratio){
@@ -28,7 +30,7 @@ int ChildMotor::getDir(){ return dir; }
 float ChildMotor::getError(){ return error; }
 float ChildMotor::getMaxV(){ return max_v_mm_sec; }
 float ChildMotor::getMinV(){ return min_v_mm_sec; }
-float ChildMotor::getVel(){  return this->r.getVel_abs() * dir; }
+float ChildMotor::getVel(){  return r.getVel_abs() * dir; }
 
 void ChildMotor::move_motor(float input){
     int duty = offset_duty + (max_duty - offset_duty) * abs(input);
@@ -61,14 +63,14 @@ void ChildMotor::velWrite(float targ_vel_mm_sec){
 void ChildMotor::velWrite_ratio(float input){}
 
 void ChildMotor::update_rotary(){
-    this->r.update();
+    r.update();
 }
 
 void ChildMotor::update(float targ_vel_mm_sec){
-    this->r.update();
+    r.update();
     velWrite(targ_vel_mm_sec);
 }
 
-void ChildMotor::update_func(){
-    this->r.update_func();
-}
+// void ChildMotor::update_func(){
+//     r.update_func();
+// }

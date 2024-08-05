@@ -6,8 +6,8 @@ class QRotary
 {
 public:
     // setup
-    void begin(int rotary_pin_1, int rotary_pin_2, int steps_per_click, int wheel_rad_mm, int gear_ratio, int interval);
-    void setRotaryPin(int rotary_pin_1, int rotary_pin_2);
+    void begin(void (*callback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2, int steps_per_click, int wheel_rad_mm, int gear_ratio, int interval);
+    void setRotaryPin(void (*clalback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2);
     void setStepsPerClick(int steps_per_click);
     void setWheel(int wheel_rad_mm, int gear_ratio);
     void setInterval(int interval);
@@ -20,11 +20,10 @@ public:
 
     // functions to use in main loop
     void update();
-    // without checking millis
-    void update_func();
 
 private:
     int encoder_value = 0;
+    int* rotary_count;
 
     int rotary_pin_1;
     int rotary_pin_2;
