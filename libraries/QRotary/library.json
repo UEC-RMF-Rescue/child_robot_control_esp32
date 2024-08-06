@@ -1,6 +1,6 @@
 {
 	"name": "QRotary",
-	"version": "0.0.5",
+	"version": "0.0.7",
 	"keywords": "rotary encoder for child robot, esp32",
 	"description": "ESP8266/Arduino Library for reading rotary encoder values.",
 	"repository": {

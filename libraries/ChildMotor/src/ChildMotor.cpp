@@ -10,7 +10,7 @@ void ChildMotor::attach_motor(int motor_pin_1, uint8_t motor_channel_1, int moto
     this->max_v_mm_sec = max_v_mm_sec;
     this->min_v_mm_sec = min_v_mm_sec;
     this->ave_v_mm_sec = (max_v_mm_sec + max_v_mm_sec) / 2;
-    this->max_duty = pow(2.0, (float)resolution_bites);
+    this->max_duty = pow(2.0, (float)resolution_bites) * 0.7;
 }
 
 void ChildMotor::attach_encoder(void (*callback)(), int* rotary_count, int rotary_pin_1, int rotary_pin_2, int interval, int steps_per_click, int wheel_rad_mm, int gear_ratio){
@@ -32,7 +32,12 @@ float ChildMotor::getVel(){  return r.getVel_abs() * dir; }
 
 void ChildMotor::move_motor(float input){
     int duty = offset_duty + (max_duty - offset_duty) * abs(input);
-    this->duty_now = duty;
+    // protection
+    if (duty - duty_now > 10){ duty = duty_now + 10;
+    }else if (duty - duty_now < -10){ duty = duty_now - 10; }
+
+    duty_now = duty;
+
     if (input > 0){
         ledcWrite(motor_channel_1, duty);
         ledcWrite(motor_channel_2, 0);

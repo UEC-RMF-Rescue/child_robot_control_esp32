@@ -2,7 +2,7 @@
 #define ChildMotor_h
 
 #include <Arduino.h>
-#include "../QRotary/srcQRotary.h"
+#include "../../QRotary/src/QRotary.h"
 #include <math.h>
 
 class ChildMotor

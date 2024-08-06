@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "ChildMotor_dev.h"
+#include "ChildMotor.h"
 #include "pinassign.h"
 
 #define INTERVAL 100
@@ -43,87 +43,57 @@ void setup() {
   Serial.begin(115200);
 }
 
-float i = 0;
-float turn = 0.01;
-
-long previousMillis = 0;
-long currentMillis;
+int count;
+float targ = 100;
 void loop() {
-  // m1.update(-100);
-  // m2.update(-100);
-  m3.update(-i);
-  m4.update(i);
-  i += turn;
-  if (abs(i) > 100){
-    turn *= -1;
+  if (count > 2400){
+    targ = 100;
+    count = 0;
+  }else if (count > 1800){
+    targ = -250;
+  }else if (count > 1200){
+    targ = 250;
+  }else if (count > 600){
+    targ = -100;
   }
+  count ++;
 
-  // m1.move_motor(0.2);
-  // m2.move_motor(0.2);
-  // m3.move_motor(0.2);
-  // m4.move_motor(0.2);
-  // delay(2000);
-  // m1.move_motor(0);
-  // m2.move_motor(0);
-  // m3.move_motor(0);
-  // m4.move_motor(0);
-  // delay(1000);
-  // m1.move_motor(-0.2);
-  // m2.move_motor(-0.2);
-  // m3.move_motor(-0.2);
-  // m4.move_motor(-0.2);
-  // delay(2000);
-  // m1.move_motor(0);
-  // m2.move_motor(0);
-  // m3.move_motor(0);
-  // m4.move_motor(0);
-  // delay(1000);
+  m1.update(targ);
+  m2.update(targ);
+  m3.update(targ);
+  m4.update(targ);
 
-  // m1.update_rotary();
-  // m2.update_rotary();
-  
-  // currentMillis = millis();
-  // if (currentMillis - previousMillis > INTERVAL){
-  //   previousMillis = currentMillis;
-  //   m1.update_func();
-  //   m2.update_func();
-    
-  //   m1.reset();
-  // }
+  Serial.println(count);
 
-  // Serial.print("counts: ");
-  // Serial.print(counts[0]);
-  // Serial.print(", ");
-  // Serial.println(counts[1]);
-  
-  // Serial.print("m1: ");
-  // Serial.print("error: ");
-  // Serial.print(m1.getError());
-  // Serial.print(", vel: ");
-  // Serial.print(m1.getVel());
+  Serial.print("m1...");
+  Serial.print("error: ");
+  Serial.print(m1.getError());
+  Serial.print(", vel: ");
+  Serial.print(m1.getVel());
+  Serial.print(", duty: ");
+  Serial.println(m1.getDuty());
 
-  // Serial.print(", value: ");
-  // Serial.print(m1.getValue());
-  
-  // Serial.print(", dir: ");
-  // Serial.print(m1.getDir());
-  // Serial.print(", duty: ");
-  // Serial.println(m1.getDuty());
+  Serial.print("m2...");
+  Serial.print("error: ");
+  Serial.print(m2.getError());
+  Serial.print(", vel: ");
+  Serial.print(m2.getVel());
+  Serial.print(", duty: ");
+  Serial.println(m2.getDuty());
 
-  // Serial.print("m2: ");
-  // Serial.print("error: ");
-  // Serial.print(m2.getError());
-  // Serial.print(", vel: ");
-  // Serial.print(m2.getVel());
+  Serial.print("m3...");
+  Serial.print("error: ");
+  Serial.print(m3.getError());
+  Serial.print(", vel: ");
+  Serial.print(m3.getVel());
+  Serial.print(", duty: ");
+  Serial.println(m3.getDuty());
 
-  // Serial.print(", value: ");
-  // Serial.print(m2.getValue());
-
-  // // Serial.print(", dir: ");
-  // // Serial.print(m2.getDir());
-  // Serial.print(", duty: ");
-  // Serial.println(m2.getDuty());
-
-  Serial.print("target: ");
-  Serial.println(i);
+  Serial.print("m4...");
+  Serial.print("error: ");
+  Serial.print(m4.getError());
+  Serial.print(", vel: ");
+  Serial.print(m4.getVel());
+  Serial.print(", duty: ");
+  Serial.println(m4.getDuty());
 }
