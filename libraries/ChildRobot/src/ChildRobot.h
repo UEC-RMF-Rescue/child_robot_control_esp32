@@ -8,7 +8,7 @@
 #include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
-#include <pinassign.h>
+// #include <pinassign.h>
 
 class ChildRobot
 {
@@ -28,6 +28,9 @@ public:
     std::array<float, 4> getVelOrder();
     std::array<float, 2> getVelPrev();
 
+    void update_vel();
+    void update_dist();
+    void update_bno();
     void update();
     void update_state();
 
@@ -61,7 +64,7 @@ private:
 
     Adafruit_BNO055 bno = Adafruit_BNO055(-1, 0x28, &Wire);
     float offset = 0;
-    sensors_event_t yaw;
+    // sensors_event_t yaw;
 
     double cos_calc();
     double sin_calc();
@@ -69,9 +72,6 @@ private:
     std::array<float, 4> vel_divide(float vx, float vy, float vtheta);
     std::array<float, 2> vel_merge(float v1, float v2, float v3);
 
-    void update_vel();
-    void update_dist();
-    void update_bno();
 };
 
 #endif

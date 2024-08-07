@@ -1,0 +1,15 @@
+{
+	"name": "ChildRobot",
+	"version": "0.0.2",
+	"keywords": "rotary encoder for child robot, esp32",
+	"description": "ESP8266/Arduino Library for 4 omunirobot.",
+	"repository": {
+		"type": "git",
+		"url": "not yet"
+	},
+	"authors": {
+		"name": "UEC RMF Rescue"
+	},
+	"frameworks": "arduino",
+	"platforms": "*"
+}

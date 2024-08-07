@@ -52,20 +52,20 @@ void setup() {
     R.set_control(P_COEF_DIST, D_COEF_DIST, P_COEF_THETA, D_COEF_THETA);
     if(!R.bno_begin(RX, TX, INTERVAL)){
         Serial.println("cannot connect to bno");
-    }else{R.reset_bno();}
+    }else{
+        Serial.println("starting bno");
+        delay(1000);
+        R.update_bno();
+        R.reset_bno();
+    }
     R.set_motor(m1, m2, m3, m4);
-    R.reset_bno();
 
-    R.set_targ(0 ,0 ,0);
+    R.set_targ(1000 ,0 ,0);
 }
 
 void loop() {
-    // m1.update(100);
-    // m2.update(100);
-    // m3.update(100);
-    // m4.update(100);
-
     R.update();
+    
     Serial.print("dist: ");
     Serial.print(R.getDist()[0]);
     Serial.print(", ");
@@ -78,18 +78,4 @@ void loop() {
     Serial.print(R.getError()[1]);
     Serial.print(", ");
     Serial.println(R.getError()[2]);
-
-    // Serial.print("prev_v: ");
-    // Serial.print(R.getVelPrev()[0]);
-    // Serial.print(", ");
-    // Serial.println(R.getVelPrev()[1]);
-
-    // Serial.print("vel order: ");
-    // Serial.print(R.getVelOrder()[0]);
-    // Serial.print(", ");
-    // Serial.print(R.getVelOrder()[1]);
-    // Serial.print(", ");
-    // Serial.print(R.getVelOrder()[2]);
-    // Serial.print(", ");
-    // Serial.println(R.getVelOrder()[3]);
 }

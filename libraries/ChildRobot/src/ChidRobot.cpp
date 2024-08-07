@@ -25,25 +25,6 @@ std::array<float, 2> ChildRobot::vel_merge(float v1, float v2, float v3){
     return {vx, vy};
 }
 
-void ChildRobot::update_dist(){
-    float v1 = motors[0].getVel();
-    float v2 = motors[1].getVel();
-    float v3 = motors[2].getVel();
-    std::array<float, 2> vel = vel_merge(v1, v2, v3);
-
-    current[0] += (vel_prev[0] + vel[0]) * interval / 1000.0 *0.5;
-    current[1] += (vel_prev[1] + vel[1]) * interval / 1000.0 *0.5;
-    vel_prev[0] = vel[0];
-    vel_prev[1] = vel[1];
-}
-
-void ChildRobot::update_bno(){
-    bno.getEvent(&yaw, Adafruit_BNO055::VECTOR_EULER);
-    current[2] = (float)yaw.orientation.x + offset;
-    if ( current[2] < 0.0 ){ current[2] = 360.0 + current[2]; 
-    }else if ( current[2] > 360.0 ){ current[2] = current[2] - 360; }
-}
-
 void ChildRobot::set_targ(float targ_rx, float targ_ry, float targ_theta){
     this->targ[0] = targ_rx;
     this->targ[1] = targ_ry;
@@ -60,10 +41,10 @@ void ChildRobot::set_control(float p_coef_dist, float d_coef_dist, float p_coef_
 int ChildRobot::bno_begin(int rx, int tx, int interval){
     this->interval = interval;
     Wire.begin(rx, tx);
-    if(!bno.begin()){return 1;}
+    if(!bno.begin()){return 0;}
     bno.setExtCrystalUse(true);
     update_bno();
-    return 0;
+    return 1;
 }
 
 void ChildRobot::set_motor(ChildMotor m1, ChildMotor m2, ChildMotor m3, ChildMotor m4){
@@ -131,13 +112,33 @@ void ChildRobot::update_vel(){
     }
 
     std::array<float, 4> vel = vel_divide(vx, vy, vtheta);
-    // motors[0].update(vel[0]);
-    // motors[1].update(vel[1]);
-    // motors[2].update(vel[2]);
-    // motors[3].update(vel[3]);
+    motors[0].update(vel[0]);
+    motors[1].update(vel[1]);
+    motors[2].update(vel[2]);
+    motors[3].update(vel[3]);
     
     for (int i=0; i<3; i++){ error_prev[i] = error[i] ;}
     for (int i=0; i<4; i++){ vel_order[i] = vel[i]; }
+}
+
+void ChildRobot::update_dist(){
+    float v1 = motors[0].getVel();
+    float v2 = motors[1].getVel();
+    float v3 = motors[2].getVel();
+    std::array<float, 2> vel = vel_merge(v1, v2, v3);
+
+    current[0] += (vel_prev[0] + vel[0]) * interval / 1000.0 *0.5;
+    current[1] += (vel_prev[1] + vel[1]) * interval / 1000.0 *0.5;
+    vel_prev[0] = vel[0];
+    vel_prev[1] = vel[1];
+}
+
+void ChildRobot::update_bno(){
+    sensors_event_t yaw;
+    bno.getEvent(&yaw, Adafruit_BNO055::VECTOR_EULER);
+    current[2] = (float)yaw.orientation.x + offset;
+    if ( current[2] < 0.0 ){ current[2] = 360.0 + current[2]; 
+    }else if ( current[2] > 360.0 ){ current[2] = current[2] - 360; }
 }
 
 void ChildRobot::update(){
