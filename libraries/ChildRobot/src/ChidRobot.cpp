@@ -58,12 +58,12 @@ void ChildRobot::reset_bno(float yaw){
     current[2] = yaw; prev[2] = yaw;
 }
 
-void ChildRobot::reset_dist(){
-    current[0] = 0; current[1] = 0;
-    prev[0] = 0; prev[1] = 0;
+void ChildRobot::reset_dist(float x, float y){
+    current[0] = x; current[1] = y;
+    prev[0] = x; prev[1] = y;
 }
 
-std::array<float, 2> ChildRobot::getDist(){
+std::array<float, 2> ChildRobot::getCurrent(){
     return { current[0], current[1] };
 }
 

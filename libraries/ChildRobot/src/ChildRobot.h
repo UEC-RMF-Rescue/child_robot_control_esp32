@@ -20,9 +20,9 @@ public:
     void set_body(int rad = 63);
 
     void reset_bno(float yaw = 0);
-    void reset_dist();
+    void reset_dist(float x, float y);
 
-    std::array<float, 2> getDist();
+    std::array<float, 2> getCurrent();
     float getAngle();
     std::array<float, 3> getError();
     std::array<float, 4> getVelOrder();
