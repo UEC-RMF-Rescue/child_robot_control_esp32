@@ -32,6 +32,7 @@ public:
     void update_dist();
     void update_bno();
     void update();
+    void stop();
     void update_state();
 
 private:

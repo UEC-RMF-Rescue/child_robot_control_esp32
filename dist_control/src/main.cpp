@@ -60,16 +60,18 @@ void setup() {
     }
     R.set_motor(m1, m2, m3, m4);
 
-    R.set_targ(1000 ,0 ,0);
+    R.set_targ(0 ,0 ,0);
+    R.reset_bno(180);
 }
 
-void loop() {
+int i;
+void loop() {    
     R.update();
     
     Serial.print("dist: ");
-    Serial.print(R.getDist()[0]);
+    Serial.print(R.getCurrent()[0]);
     Serial.print(", ");
-    Serial.print(R.getDist()[1]);
+    Serial.print(R.getCurrent()[1]);
     Serial.print(", angle: ");
     Serial.print(R.getAngle());
     Serial.print(", error: ");

@@ -74,15 +74,7 @@ void setup_motor(){
 }
 
 void setup() {
-  pinMode(LED_G, OUTPUT);
-  pinMode(LED_R, OUTPUT);
-
-  digitalWrite(LED_G, LOW);
-  digitalWrite(LED_R, LOW);
-
   Serial.begin(115200);
-  setup_motor();
-  Serial.println("motor_setup done");
 
   R.set_control(P_COEF_DIST, D_COEF_DIST, P_COEF_THETA, D_COEF_THETA);
   if(!R.bno_begin(RX, TX, INTERVAL)){
@@ -96,18 +88,13 @@ void setup() {
   R.set_motor(m1, m2, m3, m4);
   R.set_targ(0,0,0);
 
-  digitalWrite(LED_R, HIGH);
-
   set_microros_serial_transports(Serial);
   delay(2000);
-
-  digitalWrite(LED_R, LOW);
-  digitalWrite(LED_G, HIGH);
 
   allocator = rcl_get_default_allocator();
 
   RCCHECK(rclc_support_init(&support, 0, NULL, &allocator));
-  RCCHECK(rclc_node_init_default(&node, "ro4", "", &support));
+  RCCHECK(rclc_node_init_default(&node, "micro_ros_platformio_node", "", &support));
 
   RCCHECK(rclc_subscription_init_default(
     &sub_target,
@@ -128,6 +115,9 @@ void setup() {
     "/ro4_current"
   ));
 
+  RCCHECK(rclc_executor_add_subscription(&executor, &sub_target, &msg, &sub_target_callback, ON_NEW_DATA));
+  RCCHECK(rclc_executor_add_subscription(&executor, &sub_reset, &msg, &sub_reset_callback, ON_NEW_DATA));
+
   const unsigned int timer_timeout = 1000;
   RCCHECK(rclc_timer_init_default(
     &timer,
@@ -136,39 +126,13 @@ void setup() {
     timer_callback
   ));
 
-  RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
-  RCCHECK(rclc_executor_add_subscription(&executor, &sub_target, &msg, &sub_target_callback, ON_NEW_DATA));
-  // RCCHECK(rclc_executor_add_subscription(&executor, &sub_reset, &msg, &sub_reset_callback, ON_NEW_DATA));
-
-  
-
-  digitalWrite(LED_R, HIGH);
-  digitalWrite(LED_G, HIGH);
+  digitalWrite(LED_G, LOW);
+  digitalWrite(LED_R, LOW);
 }
 
-long previousMillis = 0;
-long currentMillis;
-void loop() {
-  R.update();
-  currentMillis = millis();
-  if (currentMillis - previousMillis > 800){
-    RCCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
-    previousMillis = currentMillis;
-  }
-
-  Serial.print("dist: ");
-  Serial.print(R.getCurrent()[0]);
-  Serial.print(", ");
-
-  Serial.print(R.getCurrent()[1]);
-  Serial.print(", angle: ");
-  Serial.print(R.getAngle());
-  Serial.print(", error: ");
-  Serial.print(R.getError()[0]);
-  Serial.print(", ");
-  Serial.print(R.getError()[1]);
-  Serial.print(", ");
-  Serial.println(R.getError()[2]);
+void loop() {  RCCHECK(rclc_executor_init(&executor, &support.context, 1, &allocator));
+  delay(100);
+  RCCHECK(rclc_executor_spin_some(&executor, RCL_MS_TO_NS(100)));
 }
 
 void error_loop(){

@@ -54,13 +54,15 @@ void ChildRobot::set_motor(ChildMotor m1, ChildMotor m2, ChildMotor m3, ChildMot
 void ChildRobot::set_body(int rad){ this->rad = rad; }
 
 void ChildRobot::reset_bno(float yaw){
-    offset = yaw - current[2];
-    current[2] = yaw; prev[2] = yaw;
+    offset = -yaw;
+    // offset = yaw - current[2];
+    // current[2] = yaw; prev[2] = yaw;
 }
 
 void ChildRobot::reset_dist(float x, float y){
     current[0] = x; current[1] = y;
     prev[0] = x; prev[1] = y;
+    targ[0] = current[0]; targ[1] = current[1];
 }
 
 std::array<float, 2> ChildRobot::getCurrent(){
@@ -89,6 +91,11 @@ void ChildRobot::update_vel(){
     error[2] = targ[2] - current[2];
     // normalization
     if (error[2] < -180.0 ){ error[2] = 360 + error[2]; }
+    // limit
+    if (error[0] > 900){ error[0] = 900;
+    }else if (error[0] < -900){error[0] = -900;}
+    if (error[1] > 900){ error[1] = 900;
+    }else if (error[1] < -900){error[1] = -900;}
 
     if (abs(error[0]) < 30) error[0] = 0;
     if (abs(error[1]) < 30) error[1] = 0;
@@ -149,6 +156,13 @@ void ChildRobot::update(){
         update_dist();
         update_bno();
     }
+}
+
+void ChildRobot::stop(){
+    motors[0].move_motor(0);
+    motors[1].move_motor(0);
+    motors[2].move_motor(0);
+    motors[3].move_motor(0);
 }
 
 void ChildRobot::update_state(){
